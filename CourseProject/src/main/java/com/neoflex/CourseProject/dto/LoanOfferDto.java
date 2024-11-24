@@ -1,11 +1,13 @@
 package com.neoflex.CourseProject.dto;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
 @Data
+@Builder
 public class LoanOfferDto {
 
     private UUID statementId;
@@ -14,7 +16,7 @@ public class LoanOfferDto {
     private Integer term;
     private BigDecimal monthlyPayment;
     private BigDecimal rate;
-    private final Boolean isInsuranceEnabled;
-    private final Boolean isSalaryClient;
+    private Boolean isInsuranceEnabled;
+    private Boolean isSalaryClient;
 
 }

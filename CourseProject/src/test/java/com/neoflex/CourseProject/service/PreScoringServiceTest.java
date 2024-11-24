@@ -1,84 +1,47 @@
 package com.neoflex.CourseProject.service;
 
-import com.neoflex.CourseProject.dto.LoanOfferDto;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import com.neoflex.CourseProject.pojo.PreScoringProperties;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
-
+@ExtendWith(MockitoExtension.class)
+@DisplayName("Mock testing the PreScoringService")
 class PreScoringServiceTest {
 
-    private PreScoringService preScoringService;
+    @Mock
+    PreScoringProperties preScoringProperties;
+
+    @InjectMocks
+    private PreScoringServiceImpl implPreScoringService;
+
     @BeforeEach
     void setUp() {
-        preScoringService = new PreScoringService();
+        when(preScoringProperties.getPointsForInsurance()).thenReturn(3);
+        when(preScoringProperties.getPointsForSalaryClient()).thenReturn(1);
+        when(preScoringProperties.getDefaultRate()).thenReturn(20);
+        when(preScoringProperties.getInsurancePrice()).thenReturn(20000);
     }
 
     @Test
-    void creatingVariationsOfLoan() {
-        List<LoanOfferDto> variations = preScoringService.creatingVariationsOfLoan();
-        List<LoanOfferDto> shouldBeSame = new ArrayList<>();
-        shouldBeSame.add(new LoanOfferDto(false,false));
-        shouldBeSame.add(new LoanOfferDto(false,true));
-        shouldBeSame.add(new LoanOfferDto(true,false));
-        shouldBeSame.add(new LoanOfferDto(true,true));
-        assertIterableEquals(variations, shouldBeSame);
+    @DisplayName("Mock testing the method resultsOfPreScoring for the number of returned objects")
+    void resultsOfPreScoring_shouldReturnArrayOf4(){
+        Assertions.assertEquals(4, implPreScoringService.resultsOfPreScoring(BigDecimal.valueOf(200000)).size());
     }
 
     @Test
-    void preScoringOfLoanOffer_shouldReturnRate4() {
-        LoanOfferDto offer = new LoanOfferDto(false, false); // Например, без страховки, зарплатный клиент
-        preScoringService.preScoringOfLoanOffer(offer, BigDecimal.valueOf(100000));
-        assertEquals(BigDecimal.valueOf(4), offer.getRate());
-    }
-
-    @Test
-    void preScoringOfLoanOffer_shouldReturnRate2() {
-        LoanOfferDto offer = new LoanOfferDto(false, true); // Например, без страховки, зарплатный клиент
-        preScoringService.preScoringOfLoanOffer(offer,BigDecimal.valueOf(100000));
-        assertEquals(BigDecimal.valueOf(2), offer.getRate());
-    }
-    @Test
-    void preScoringOfLoanOffer_shouldReturnRateMinus2() {
-        LoanOfferDto offer = new LoanOfferDto(true, false); // Например, без страховки, зарплатный клиент
-        preScoringService.preScoringOfLoanOffer(offer,BigDecimal.valueOf(100000));
-        assertEquals(BigDecimal.valueOf(-2), offer.getRate());
-    }
-
-    @Test
-    void preScoringOfLoanOffer_shouldReturnRateMinus4() {
-        LoanOfferDto offer = new LoanOfferDto(true, true); // Например, без страховки, зарплатный клиент
-        preScoringService.preScoringOfLoanOffer(offer, BigDecimal.valueOf(100000));
-        assertEquals(BigDecimal.valueOf(-4), offer.getRate());
-    }
-
-    @Test
-    void sortLoanOffers(){
-        List<LoanOfferDto> variations = new ArrayList<>();
-        variations.add(new LoanOfferDto(false,false));
-        variations.add(new LoanOfferDto(false,true));
-        variations.add(new LoanOfferDto(true,false));
-        variations.add(new LoanOfferDto(true,true));
-        for(LoanOfferDto variant : variations)
-            preScoringService.preScoringOfLoanOffer(variant,BigDecimal.valueOf(100000));
-        preScoringService.sortLoanOffers(variations);
-        List<BigDecimal> rateFromList = variations.stream().map(LoanOfferDto::getRate).toList();
-        List<BigDecimal> shouldBe = new ArrayList<>();
-        shouldBe.add(BigDecimal.valueOf(-4));
-        shouldBe.add(BigDecimal.valueOf(-2));
-        shouldBe.add(BigDecimal.valueOf(2));
-        shouldBe.add(BigDecimal.valueOf(4));
-
-        assertArrayEquals(new List[]{shouldBe}, new List[]{rateFromList});
-    }
-
-    @Test
-    void resultsOfPreScoring() {
+    @DisplayName("Mock testing the method resultsOfPreScoring for equality of objects")
+    void resultsOfPreScoring_shouldBeEquals(){
+        Assertions.assertEquals(BigDecimal.valueOf(24), implPreScoringService.resultsOfPreScoring(BigDecimal.valueOf(200000)).get(0).getRate());
+        Assertions.assertEquals(BigDecimal.valueOf(22), implPreScoringService.resultsOfPreScoring(BigDecimal.valueOf(200000)).get(1).getRate());
+        Assertions.assertEquals(BigDecimal.valueOf(18), implPreScoringService.resultsOfPreScoring(BigDecimal.valueOf(200000)).get(2).getRate());
+        Assertions.assertEquals(BigDecimal.valueOf(16), implPreScoringService.resultsOfPreScoring(BigDecimal.valueOf(200000)).get(3).getRate());
     }
 }
