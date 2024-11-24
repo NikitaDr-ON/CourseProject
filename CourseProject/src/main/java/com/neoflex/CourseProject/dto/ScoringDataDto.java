@@ -2,12 +2,14 @@ package com.neoflex.CourseProject.dto;
 
 import com.neoflex.CourseProject.dto.enums.Gender;
 import com.neoflex.CourseProject.dto.enums.MaritalStatus;
+import lombok.Builder;
 import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
+@Builder
 public class ScoringDataDto {
 
       private BigDecimal amount;

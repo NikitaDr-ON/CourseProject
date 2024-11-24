@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"com.neoflex.CourseProject.service","l":"CalculatingService"}];updateSearchResults();
