@@ -1,4 +1,4 @@
-package com.neoflex.CourseProject.dto;
+package com.neoflex.CourseProject.exception;
 
 import lombok.Data;
 
