@@ -26,26 +26,23 @@ import java.time.LocalDate;
 class ScoringServiceTest {
 
     @Mock
-    private CalculationServiceImpl calculationServiceImpl;
+    private CalculationService calculationServiceImpl;
 
     @Mock
-    private RatingServiceImpl ratingServiceImpl;
+    private RatingService ratingServiceImpl;
 
     @Mock
-    private ScoringValidationServiceImpl scoringValidationServiceImpl;
+    private ScoringValidationService scoringValidationServiceImpl;
 
     @Mock
     ScoringProperties scoringProperties;
 
     @InjectMocks
-    private ScoringServiceImpl implScoringService;
+    private ScoringService implScoringService = new ScoringServiceImpl(scoringValidationServiceImpl, ratingServiceImpl,
+            scoringProperties, calculationServiceImpl);
 
     @BeforeEach
     void beforeEach() {
-        int pointsForInsurance = 3;
-        int pointsForSalaryClient = 1;
-        int insurancePrice = 20000;
-        int defaultRate = 20;
         BigDecimal daysInYear = BigDecimal.valueOf(365);
         BigDecimal pointsForSelfEmployed = BigDecimal.valueOf(2);
         BigDecimal pointsForBusinessOwner = BigDecimal.valueOf(1);
