@@ -19,9 +19,9 @@ public class PaymentScheduleElementDto {
     private BigDecimal totalPayment;
     @Schema(name = "interestPayment", example = "33333.33")
     private BigDecimal interestPayment;
-    @Schema(name = "interestPayment", example = "344.26")
+    @Schema(name = "debtPayment", example = "344.26")
     private BigDecimal debtPayment;
-    @Schema(name = "interestPayment", example = "0")
+    @Schema(name = "remainingDebt", example = "0")
     private BigDecimal remainingDebt;
 
 }

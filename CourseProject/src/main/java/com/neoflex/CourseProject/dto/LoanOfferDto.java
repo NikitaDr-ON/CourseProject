@@ -25,7 +25,7 @@ public class LoanOfferDto {
     private BigDecimal rate;
     @Schema(name = "isInsuranceEnabled", example = "true")
     private Boolean isInsuranceEnabled;
-    @Schema(name = "isInsuranceEnabled", example = "true")
+    @Schema(name = "isSalaryClient", example = "true")
     private Boolean isSalaryClient;
 
 }
