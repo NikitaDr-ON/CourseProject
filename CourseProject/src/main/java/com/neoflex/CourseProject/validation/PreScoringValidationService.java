@@ -1,7 +1,7 @@
-package com.neoflex.CourseProject.service;
+package com.neoflex.CourseProject.validation;
 
 import com.neoflex.CourseProject.dto.LoanStatementRequestDto;
 
-public interface ValidationService {
+public interface PreScoringValidationService {
     void resultsOfValidation(LoanStatementRequestDto loanStatementRequestDto);
 }

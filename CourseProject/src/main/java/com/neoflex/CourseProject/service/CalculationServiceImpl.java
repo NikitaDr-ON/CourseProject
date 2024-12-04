@@ -31,8 +31,8 @@ public class CalculationServiceImpl implements CalculationService {
      * @param creditDto используется для получения суммы кредита, которая используется в расчете пск и создании
      *                  расписания платежей
      *                  <p>Изначально остаток равен сумме запрошенного кредита. debtPayment считается как
-     *                  остаток * ставку в % * количество дней в месяце / количество дней в году(в расчете
-     *                  используется 366 дней) basePayment рассчитывается как сумма запрошенного кредита / срок кредита
+     *                  остаток * ставку в % * количество дней в месяце / количество дней в году
+     *                  basePayment рассчитывается как сумма запрошенного кредита / срок кредита
      *                  в месяцах.
      *                  totalPayment это сумма debtPayment и basePayment выплаченная за месяц.
      *                  В цикле заполняется расписание платежей по кредиту PaymentScheduleElementDto.
@@ -49,7 +49,7 @@ public class CalculationServiceImpl implements CalculationService {
         BigDecimal daysInYear;
         BigDecimal percent = calculatingPercent(creditDto.getRate());
         BigDecimal amountPayment = BigDecimal.valueOf(0);
-        int daysInMonth = 0;
+        int daysInMonth;
         List<PaymentScheduleElementDto> paymentScheduleElementDto = new ArrayList<>();
         for (int i = 0; i < creditDto.getTerm(); i++) {
             daysInMonth = getDaysInMonth(i);
@@ -84,7 +84,7 @@ public class CalculationServiceImpl implements CalculationService {
     private BigDecimal calculatingPercent(BigDecimal rate) {
         log.info("calculatingPercent входной параметр: {}", rate);
         BigDecimal percent = rate.divide(scoringProperties.getPercent(), 2, RoundingMode.HALF_UP);
-        log.info("результат расчета процента: {}", rate);
+        log.info("результат расчета процента: {}", percent);
         return percent;
     }
 

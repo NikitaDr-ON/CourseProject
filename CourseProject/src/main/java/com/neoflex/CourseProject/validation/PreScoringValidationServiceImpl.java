@@ -1,4 +1,4 @@
-package com.neoflex.CourseProject.service;
+package com.neoflex.CourseProject.validation;
 
 import com.neoflex.CourseProject.dto.LoanStatementRequestDto;
 import com.neoflex.CourseProject.exception.ValidationException;
@@ -13,12 +13,12 @@ import java.time.Period;
 
 @Service
 @Slf4j
-public class ValidationServiceImpl implements ValidationService {
+public class PreScoringValidationServiceImpl implements PreScoringValidationService {
 
     private final ValidationProperties validationProperties;
 
     @Autowired
-    public ValidationServiceImpl(ValidationProperties validationProperties) {
+    public PreScoringValidationServiceImpl(ValidationProperties validationProperties) {
         this.validationProperties = validationProperties;
     }
 

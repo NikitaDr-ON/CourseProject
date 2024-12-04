@@ -31,7 +31,7 @@ public class ScoringDataDto {
     private String passportSeries;
     @Schema(name = "passportNumber", example = "123456")
     private String passportNumber;
-    @Schema(name = "passportIssueDate", format = "yyyy-mm-dd", example = "2030-02-23")
+    @Schema(name = "passportIssueDate", format = "yyyy-mm-dd", example = "2000-02-23")
     private LocalDate passportIssueDate;
     @Schema(name = "passportIssueBranch", example = "some issue branch")
     private String passportIssueBranch;

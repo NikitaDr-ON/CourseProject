@@ -3,6 +3,8 @@ package com.neoflex.CourseProject.service;
 import com.neoflex.CourseProject.dto.LoanStatementRequestDto;
 import com.neoflex.CourseProject.exception.ValidationException;
 import com.neoflex.CourseProject.model.ValidationProperties;
+import com.neoflex.CourseProject.validation.PreScoringValidationService;
+import com.neoflex.CourseProject.validation.PreScoringValidationServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,13 +20,13 @@ import java.time.LocalDate;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("Mock testing the ValidationService")
-class ValidationServiceTest {
+class PreScoringValidationServiceTest {
 
     @Mock
     private ValidationProperties validationProperties;
 
     @InjectMocks
-    private ValidationService ValidationServiceIml = new ValidationServiceImpl(validationProperties);
+    private PreScoringValidationService preScoringValidationServiceIml = new PreScoringValidationServiceImpl(validationProperties);
 
     @BeforeEach
     void beforeEach() {
@@ -42,7 +44,7 @@ class ValidationServiceTest {
         validationProperties = new ValidationProperties(namesRegex, passportSeriesRegex, emailRegex,
                 passportNumberRegex, minimalAmount, minimalTerm, minimalAge, nameMinSymbolsRestriction,
                 nameMaxSymbolsRestriction, countOfPassportSeriesDigits, countOfPassportNumberDigits);
-        ReflectionTestUtils.setField(ValidationServiceIml, "validationProperties", validationProperties);
+        ReflectionTestUtils.setField(preScoringValidationServiceIml, "validationProperties", validationProperties);
     }
 
     @Test
@@ -59,7 +61,7 @@ class ValidationServiceTest {
                 .passportSeries("1234")
                 .term(10)
                 .build();
-        Assertions.assertDoesNotThrow(() -> ValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
+        Assertions.assertDoesNotThrow(() -> preScoringValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
     }
 
     @Test
@@ -75,7 +77,7 @@ class ValidationServiceTest {
                 .passportSeries("1234")
                 .term(10)
                 .build();
-        Assertions.assertDoesNotThrow(() -> ValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
+        Assertions.assertDoesNotThrow(() -> preScoringValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
     }
 
     @Test
@@ -93,7 +95,7 @@ class ValidationServiceTest {
                 .term(10)
                 .build();
         Assertions.assertThrows(ValidationException.class, () ->
-                ValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
+                preScoringValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
     }
 
     @Test
@@ -111,7 +113,7 @@ class ValidationServiceTest {
                 .term(10)
                 .build();
         Assertions.assertThrows(ValidationException.class, () ->
-                ValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
+                preScoringValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
     }
 
     @Test
@@ -129,7 +131,7 @@ class ValidationServiceTest {
                 .term(10)
                 .build();
         Assertions.assertThrows(ValidationException.class, () ->
-                ValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
+                preScoringValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
     }
 
     @Test
@@ -147,7 +149,7 @@ class ValidationServiceTest {
                 .term(10)
                 .build();
         Assertions.assertThrows(ValidationException.class, () ->
-                ValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
+                preScoringValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
     }
 
     @Test
@@ -165,7 +167,7 @@ class ValidationServiceTest {
                 .term(10)
                 .build();
         Assertions.assertThrows(ValidationException.class, () ->
-                ValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
+                preScoringValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
     }
 
     @Test
@@ -183,7 +185,7 @@ class ValidationServiceTest {
                 .term(10)
                 .build();
         Assertions.assertThrows(ValidationException.class, () ->
-                ValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
+                preScoringValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
     }
 
     @Test
@@ -201,7 +203,7 @@ class ValidationServiceTest {
                 .term(10)
                 .build();
         Assertions.assertThrows(ValidationException.class, () ->
-                ValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
+                preScoringValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
     }
 
     @Test
@@ -219,7 +221,7 @@ class ValidationServiceTest {
                 .term(10)
                 .build();
         Assertions.assertThrows(ValidationException.class, () ->
-                ValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
+                preScoringValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
     }
 
     @Test
@@ -237,7 +239,7 @@ class ValidationServiceTest {
                 .term(10)
                 .build();
         Assertions.assertThrows(ValidationException.class, () ->
-                ValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
+                preScoringValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
     }
 
     @Test
@@ -255,7 +257,7 @@ class ValidationServiceTest {
                 .term(10)
                 .build();
         Assertions.assertThrows(ValidationException.class, () ->
-                ValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
+                preScoringValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
     }
 
     @Test
@@ -273,7 +275,7 @@ class ValidationServiceTest {
                 .term(2)
                 .build();
         Assertions.assertThrows(ValidationException.class, () ->
-                ValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
+                preScoringValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
     }
 
     @Test
@@ -290,7 +292,7 @@ class ValidationServiceTest {
                 .passportSeries("1234")
                 .term(12)
                 .build();
-        Assertions.assertDoesNotThrow(() -> ValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
+        Assertions.assertDoesNotThrow(() -> preScoringValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
     }
 
     @Test
@@ -307,6 +309,6 @@ class ValidationServiceTest {
                 .passportSeries("1234")
                 .term(6)
                 .build();
-        Assertions.assertDoesNotThrow(() -> ValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
+        Assertions.assertDoesNotThrow(() -> preScoringValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
     }
 }

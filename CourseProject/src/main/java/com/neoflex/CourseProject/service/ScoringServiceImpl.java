@@ -3,6 +3,7 @@ package com.neoflex.CourseProject.service;
 import com.neoflex.CourseProject.dto.CreditDto;
 import com.neoflex.CourseProject.dto.ScoringDataDto;
 import com.neoflex.CourseProject.model.ScoringProperties;
+import com.neoflex.CourseProject.validation.ScoringValidationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

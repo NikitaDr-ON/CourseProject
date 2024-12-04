@@ -1,4 +1,4 @@
-package com.neoflex.CourseProject.service;
+package com.neoflex.CourseProject.validation;
 
 import com.neoflex.CourseProject.dto.ScoringDataDto;
 

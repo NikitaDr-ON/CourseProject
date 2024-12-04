@@ -8,6 +8,8 @@ import com.neoflex.CourseProject.dto.enums.MaritalStatus;
 import com.neoflex.CourseProject.dto.enums.Position;
 import com.neoflex.CourseProject.exception.ValidationException;
 import com.neoflex.CourseProject.model.ScoringProperties;
+import com.neoflex.CourseProject.validation.ScoringValidationService;
+import com.neoflex.CourseProject.validation.ScoringValidationServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

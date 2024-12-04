@@ -7,7 +7,7 @@ import com.neoflex.CourseProject.dto.LoanStatementRequestDto;
 import com.neoflex.CourseProject.dto.ScoringDataDto;
 import com.neoflex.CourseProject.service.PreScoringService;
 import com.neoflex.CourseProject.service.ScoringService;
-import com.neoflex.CourseProject.service.ValidationService;
+import com.neoflex.CourseProject.validation.PreScoringValidationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -27,14 +27,14 @@ public class CalculatorController {
 
     private final ScoringService scoringServiceImpl;
     private final PreScoringService preScoringServiceImpl;
-    private final ValidationService validationServiceImpl;
+    private final PreScoringValidationService preScoringValidationServiceImpl;
 
     @Autowired
     public CalculatorController(PreScoringService preScoringServiceImpl, ScoringService scoringServiceImpl,
-                                ValidationService validationServiceImpl) {
+                                PreScoringValidationService preScoringValidationServiceImpl) {
         this.preScoringServiceImpl = preScoringServiceImpl;
         this.scoringServiceImpl = scoringServiceImpl;
-        this.validationServiceImpl = validationServiceImpl;
+        this.preScoringValidationServiceImpl = preScoringValidationServiceImpl;
     }
 
     @Operation(
@@ -47,11 +47,11 @@ public class CalculatorController {
     @PostMapping("/calculator/offers")
     public List<LoanOfferDto> calculatingOfPossibleLoanTerms(
             @RequestBody LoanStatementRequestDto loanStatementRequestDto) {
-        log.info("requested loanStatementRequestDto: {}", loanStatementRequestDto);
-        validationServiceImpl.resultsOfValidation(loanStatementRequestDto);
+        log.info("запрошенный loanStatementRequestDto: {}", loanStatementRequestDto);
+        preScoringValidationServiceImpl.resultsOfValidation(loanStatementRequestDto);
         List<LoanOfferDto> result = preScoringServiceImpl.resultsOfPreScoring(loanStatementRequestDto);
         log.info("ответ список LoanOfferDto: {}", result);
-        return (result);
+        return result;
     }
 
     @Operation(
@@ -64,9 +64,10 @@ public class CalculatorController {
             @ApiResponse(responseCode = "409", description = "incorrect parameter")})
     @PostMapping("/calculator/calc")
     public CreditDto scoringData(@RequestBody ScoringDataDto scoringDataDto) {
-        log.info("requested scoringDataDto: {}", scoringDataDto);
-        log.info("creditDto response: {}", scoringServiceImpl.scoring(scoringDataDto));
-        return scoringServiceImpl.scoring(scoringDataDto);
+        log.info("запрошенный scoringDataDto: {}", scoringDataDto);
+        CreditDto result = scoringServiceImpl.scoring(scoringDataDto);
+        log.info("ответ creditDto: {}", result);
+        return result;
     }
 
 }
