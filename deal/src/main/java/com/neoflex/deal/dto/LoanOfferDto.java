@@ -15,7 +15,7 @@ public class LoanOfferDto {
     private UUID statementId;
     @Schema(name = "запрошенная сумма кредита", example = "20000")
     private BigDecimal requestedAmount;
-    @Schema(name = "итоговая сумма кредита", example = "30000")
+    @Schema(name = "сумма ежемесячной выплаты кредита вместе с процентами", example = "30000")
     private BigDecimal totalAmount;
     @Schema(name = "срок кредита", example = "6")
     private Integer term;

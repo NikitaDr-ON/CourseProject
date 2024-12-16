@@ -11,19 +11,19 @@ import java.util.List;
 @Builder
 public class CreditDto {
 
-    @Schema(name = "amount", example = "20000")
+    @Schema(name = "сумма кредита", example = "20000")
     private BigDecimal amount;
-    @Schema(name = "term", example = "6")
+    @Schema(name = "срок кредита", example = "6")
     private Integer term;
-    @Schema(name = "monthlyPayment", example = "3333.33")
+    @Schema(name = "ежемесячная выплата", example = "3333.33")
     private BigDecimal monthlyPayment;
-    @Schema(name = "rate", example = "21")
+    @Schema(name = "рейтинг", example = "21")
     private BigDecimal rate;
-    @Schema(name = "psk", example = "21214.47")
+    @Schema(name = "итоговая сумма кредита", example = "21214.47")
     private BigDecimal psk;
-    @Schema(name = "isInsuranceEnabled", example = "true")
+    @Schema(name = "включена ли страховка", example = "true")
     private Boolean isInsuranceEnabled;
-    @Schema(name = "isSalaryClient", example = "true")
+    @Schema(name = "является ли зарплатным клиентом", example = "true")
     private Boolean isSalaryClient;
     private List<PaymentScheduleElementDto> paymentSchedule;
 
