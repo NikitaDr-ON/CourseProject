@@ -11,6 +11,6 @@ public class Passport {
 
     private String series;
     private String number;
-    private String issue_branch;
-    private LocalDate issue_date;
+    private String issueBranch;
+    private LocalDate issueDate;
 }

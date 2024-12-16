@@ -50,7 +50,7 @@ public class Client {
     private MaritalStatus maritalStatus;
 
     @Column(name = "dependent_amount")
-    private int dependentAmount;
+    private Integer dependentAmount;
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "passport", columnDefinition = "jsonb")

@@ -4,12 +4,12 @@ import com.neoflex.deal.enums.ChangeType;
 import lombok.Builder;
 import lombok.Data;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
 public class StatusHistory {
     private String status;
-    private Timestamp time;
+    private LocalDateTime time;
     private ChangeType changeType;
 }

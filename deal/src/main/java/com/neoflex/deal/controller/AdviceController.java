@@ -5,9 +5,8 @@ import com.neoflex.deal.exception.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@RestControllerAdvice(basePackages = {"com.neoflex.deal.controller"})
+
 public class AdviceController {
 
     @ExceptionHandler(NotFoundException.class)
@@ -17,7 +16,7 @@ public class AdviceController {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Response> handleGenericException(Exception e) {
+    public ResponseEntity<Response> handleConflictException(Exception e) {
         Response response = new Response(e.getMessage());
         return new ResponseEntity<>(response, HttpStatus.CONFLICT);
     }

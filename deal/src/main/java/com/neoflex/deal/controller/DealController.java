@@ -9,15 +9,15 @@ import com.neoflex.deal.service.SelectService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
+@RequestMapping("/deal")
 public class DealController {
 
     private final PossibleConditionsService possibleConditionsService;
@@ -42,9 +42,11 @@ public class DealController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Ok"),
             @ApiResponse(responseCode = "409", description = "incorrect parameter")})
-    @PostMapping("/deal/statement")
-    public List<LoanOfferDto> calculatingOfPossibleLoanTerms(
+    @PostMapping("/statement")
+    public List<LoanOfferDto> calculatePossibleLoanTerms(
             @RequestBody LoanStatementRequestDto loanStatementRequestDto) {
+        log.info("DealController calculatePossibleLoanTerms входящий LoanStatementRequestDto: {}",
+                loanStatementRequestDto);
         return possibleConditionsService.getPossibleConditions(loanStatementRequestDto);
     }
 
@@ -56,9 +58,12 @@ public class DealController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Ok"),
-            @ApiResponse(responseCode = "404", description = "not found")})
-    @PostMapping("/deal/offer/select")
+            @ApiResponse(responseCode = "404", description = "not found"),
+            @ApiResponse(responseCode = "409", description = "incorrect parameter")})
+    @PostMapping("/offer/select")
     public void selectOffer(@RequestBody LoanOfferDto loanOfferDto) {
+        log.info("DealController selectOffer входящий LoanOfferDto: {}",
+                loanOfferDto);
         selectService.selectStatement(loanOfferDto);
     }
 
@@ -77,10 +82,13 @@ public class DealController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Ok"),
-            @ApiResponse(responseCode = "404", description = "not found")})
+            @ApiResponse(responseCode = "404", description = "not found"),
+            @ApiResponse(responseCode = "409", description = "incorrect parameter")})
     @PostMapping("/deal/calculate/{statementId}")
     public void completeRegistration(@RequestBody FinishRegistrationRequestDto finishRegistrationRequestDto,
                                      @PathVariable String statementId) {
+        log.info("DealController completeRegistration входящий FinishRegistrationRequestDto: {}, statementId: {}",
+                finishRegistrationRequestDto, statementId);
         finishRegistrationService.finishRegistration(finishRegistrationRequestDto, statementId);
     }
 

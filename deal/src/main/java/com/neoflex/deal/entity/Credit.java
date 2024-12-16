@@ -1,9 +1,12 @@
 package com.neoflex.deal.entity;
 
+import com.neoflex.deal.dto.PaymentScheduleElementDto;
 import com.neoflex.deal.enums.CreditStatus;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -22,7 +25,7 @@ public class Credit {
     private BigDecimal amount;
 
     @Column(name = "term")
-    private int term;
+    private Integer term;
 
     @Column(name = "monthly_payment")
     private BigDecimal monthlyPayment;
@@ -33,14 +36,15 @@ public class Credit {
     @Column(name = "psk")
     private BigDecimal psk;
 
-//    @Column(name = "payment_schedule")
-//    private
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "payment_schedule", columnDefinition = "jsonb")
+    private PaymentScheduleElementDto paymentSchedule;
 
     @Column(name = "insurance_enabled")
-    private boolean insuranceEnabled;
+    private Boolean insuranceEnabled;
 
     @Column(name = "salary_client")
-    private boolean salaryClient;
+    private Boolean salaryClient;
 
     @Column(name = "credit_status")
     @Enumerated(EnumType.STRING)

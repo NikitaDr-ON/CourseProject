@@ -11,21 +11,21 @@ import java.util.UUID;
 @Builder
 public class LoanOfferDto {
 
-    @Schema(name = "statementId", example = "3fa85f64-5717-4562-b3fc-2c963f66afa6")
+    @Schema(name = "id заявки", example = "3fa85f64-5717-4562-b3fc-2c963f66afa6")
     private UUID statementId;
-    @Schema(name = "requestedAmount", example = "20000")
+    @Schema(name = "запрошенная сумма кредита", example = "20000")
     private BigDecimal requestedAmount;
-    @Schema(name = "totalAmount", example = "30000")
+    @Schema(name = "итоговая сумма кредита", example = "30000")
     private BigDecimal totalAmount;
-    @Schema(name = "term", example = "6")
+    @Schema(name = "срок кредита", example = "6")
     private Integer term;
-    @Schema(name = "monthlyPayment", example = "3333.33")
+    @Schema(name = "ежемесячная выплата", example = "3333.33")
     private BigDecimal monthlyPayment;
-    @Schema(name = "rate", example = "21")
+    @Schema(name = "рейтинг", example = "21")
     private BigDecimal rate;
-    @Schema(name = "isInsuranceEnabled", example = "true")
+    @Schema(name = "включена ли страховка", example = "true")
     private Boolean isInsuranceEnabled;
-    @Schema(name = "isSalaryClient", example = "true")
+    @Schema(name = "является ли зарплатным клиентом", example = "true")
     private Boolean isSalaryClient;
 
 }

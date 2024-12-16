@@ -47,7 +47,7 @@ public class Statement {
     private Timestamp signDate;
 
     @Column(name = "ses_code")
-    private int sesCode;
+    private Integer sesCode;
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "status_history", columnDefinition = "jsonb")

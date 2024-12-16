@@ -11,7 +11,7 @@ public class Employment {
 
     private String employer_inn;
     private BigDecimal salary;
-    private int work_experience_total;
-    private int work_experience_current;
+    private Integer workExperienceTotal;
+    private Integer workExperienceCurrent;
 
 }

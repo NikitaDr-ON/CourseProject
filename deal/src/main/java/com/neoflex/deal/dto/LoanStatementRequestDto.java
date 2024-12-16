@@ -11,23 +11,23 @@ import java.time.LocalDate;
 @Builder
 public class LoanStatementRequestDto {
 
-    @Schema(name = "amount", example = "20000")
+    @Schema(name = "запрошенная сумма кредита", example = "20000")
     private BigDecimal amount;
-    @Schema(name = "term", example = "6")
+    @Schema(name = "срок кредита", example = "6")
     private Integer term;
-    @Schema(name = "firstName", example = "firstName")
+    @Schema(name = "имя", example = "firstName")
     private String firstName;
-    @Schema(name = "lastName", example = "lastName")
+    @Schema(name = "фамилия", example = "lastName")
     private String lastName;
-    @Schema(name = "middleName", example = "middleName")
+    @Schema(name = "отчество", example = "middleName")
     private String middleName;
-    @Schema(name = "email", example = "email@mail.com")
+    @Schema(name = "адрес электронной почты", example = "email@mail.com")
     private String email;
-    @Schema(name = "birthdate", format = "yyyy-mm-dd", example = "2000-02-23")
+    @Schema(name = "дата рождения", format = "yyyy-mm-dd", example = "2000-02-23")
     private LocalDate birthdate;
-    @Schema(name = "passportSeries", example = "1234")
+    @Schema(name = "серия паспорта", example = "1234")
     private String passportSeries;
-    @Schema(name = "passportNumber", example = "123456")
+    @Schema(name = "номер паспорта", example = "123456")
     private String passportNumber;
 
 }

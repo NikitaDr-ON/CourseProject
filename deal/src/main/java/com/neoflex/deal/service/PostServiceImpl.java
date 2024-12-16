@@ -26,6 +26,7 @@ public class PostServiceImpl implements PostService {
         this.postServiceProperties = postServiceProperties;
     }
 
+    @Override
     public List<LoanOfferDto> postOffers(LoanStatementRequestDto loanStatementRequestDto) {
         log.info("отправление post запроса с LoanStatementRequestDto: {}", loanStatementRequestDto);
         RestClient restClient = RestClient.create();
@@ -40,6 +41,7 @@ public class PostServiceImpl implements PostService {
         return loanOfferDtoList;
     }
 
+    @Override
     public CreditDto postLoanOfferDto(ScoringDataDto scoringDataDto) {
         log.info("отправление post запроса с ScoringDataDto: {}", scoringDataDto);
         RestClient restClient = RestClient.create();
