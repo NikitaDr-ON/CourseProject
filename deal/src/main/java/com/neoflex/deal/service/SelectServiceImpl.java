@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -50,7 +49,7 @@ public class SelectServiceImpl implements SelectService {
         log.info("SelectServiceImpl создание нового элемента StatusHistory на основе ApplicationStatus: {}", status);
         StatusHistory statusHistory = StatusHistory.builder()
                 .status(String.valueOf(status))
-                .time(LocalDateTime.from(LocalDate.now()))
+                .time(LocalDateTime.from(LocalDateTime.now()))
                 .changeType(ChangeType.AUTOMATIC)
                 .build();
         log.info("SelectServiceImpl созданный элемент StatusHistory: {}", statusHistory);

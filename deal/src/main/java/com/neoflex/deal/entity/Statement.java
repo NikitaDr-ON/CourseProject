@@ -9,7 +9,7 @@ import lombok.Data;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,14 +37,14 @@ public class Statement {
     private ApplicationStatus status;
 
     @Column(name = "creation_date")
-    private Timestamp creationDate;
+    private LocalDateTime creationDate;
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "applied_offer", columnDefinition = "jsonb")
     private AppliedOffer appliedOffer;
 
     @Column(name = "sign_date")
-    private Timestamp signDate;
+    private LocalDateTime signDate;
 
     @Column(name = "ses_code")
     private Integer sesCode;

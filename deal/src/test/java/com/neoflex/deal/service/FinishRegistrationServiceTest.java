@@ -57,8 +57,8 @@ class FinishRegistrationServiceTest {
         Passport passport = Passport.builder()
                 .number("123123")
                 .series("1231")
-                .issue_branch("asdasd")
-                .issue_date(LocalDate.now())
+                .issueBranch("asdasd")
+                .issueDate(LocalDate.now())
                 .build();
         Client client = Client.builder()
                 .firstName("Ivan")
