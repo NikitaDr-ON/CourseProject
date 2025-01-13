@@ -17,6 +17,7 @@
 		<module>deal</module>
 		<module>calculator</module>
 		<module>statement</module>
+		<module>dossier</module>
 	</modules>
 	<packaging>pom</packaging>
 	<properties>

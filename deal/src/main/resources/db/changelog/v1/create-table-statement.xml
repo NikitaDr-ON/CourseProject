@@ -5,6 +5,11 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
 
     <changeSet id="create-table-statement" author="Nikita">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="statement"/>
+            </not>
+        </preConditions>
         <createTable tableName="statement">
             <column name="statement_id" type="uuid">
                 <constraints nullable="false" primaryKey="true"/>

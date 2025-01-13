@@ -24,7 +24,8 @@ class PreScoringValidationServiceTest {
     private ValidationProperties validationProperties;
 
     @InjectMocks
-    private PreScoringValidationService preScoringValidationServiceIml = new PreScoringValidationServiceImpl(validationProperties);
+    private PreScoringValidationService preScoringValidationServiceIml = new PreScoringValidationServiceImpl(
+            validationProperties);
 
     @BeforeEach
     void beforeEach() {
@@ -59,7 +60,8 @@ class PreScoringValidationServiceTest {
                 .passportSeries("1234")
                 .term(10)
                 .build();
-        Assertions.assertDoesNotThrow(() -> preScoringValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
+        Assertions.assertDoesNotThrow(
+                () -> preScoringValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
     }
 
     @Test
@@ -75,7 +77,8 @@ class PreScoringValidationServiceTest {
                 .passportSeries("1234")
                 .term(10)
                 .build();
-        Assertions.assertDoesNotThrow(() -> preScoringValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
+        Assertions.assertDoesNotThrow(
+                () -> preScoringValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
     }
 
     @Test
@@ -87,7 +90,7 @@ class PreScoringValidationServiceTest {
                 .email("something@gmail.com")
                 .firstName("Petr")
                 .lastName("Petrov")
-                .middleName("P")
+                .middleName("Q")
                 .passportNumber("123456")
                 .passportSeries("1234")
                 .term(10)
@@ -106,6 +109,24 @@ class PreScoringValidationServiceTest {
                 .firstName("Petr")
                 .lastName("Petrov")
                 .middleName("qweqweqweqweqweqweqweqweqweqweqwe")
+                .passportNumber("123456")
+                .passportSeries("1234")
+                .term(10)
+                .build();
+        Assertions.assertThrows(ValidationException.class, () ->
+                preScoringValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
+    }
+
+    @Test
+    @DisplayName("middle name is written in Cyrillic result incorrect")
+    void givenMiddleNameConsistOfCyrillicSymbols_whenCallResultsOfValidationMethod_shouldThrowValidationException() {
+        LoanStatementRequestDto loanStatementRequestDto = LoanStatementRequestDto.builder()
+                .amount(BigDecimal.valueOf(200000))
+                .birthdate(LocalDate.of(2002, 9, 23))
+                .email("something@gmail.com")
+                .firstName("Petr")
+                .lastName("Petrov")
+                .middleName("Петрович")
                 .passportNumber("123456")
                 .passportSeries("1234")
                 .term(10)
@@ -169,6 +190,78 @@ class PreScoringValidationServiceTest {
     }
 
     @Test
+    @DisplayName("email doesn't have the symbol . result incorrect")
+    void givenEmailDoesNotConsistSymbolDot_whenCallResultsOfValidationMethod_shouldThrowValidationException() {
+        LoanStatementRequestDto loanStatementRequestDto = LoanStatementRequestDto.builder()
+                .amount(BigDecimal.valueOf(200000))
+                .birthdate(LocalDate.of(2002, 9, 23))
+                .email("something@gmailcom")
+                .firstName("Petr")
+                .lastName("Petrov")
+                .middleName("Petrovich")
+                .passportNumber("123456")
+                .passportSeries("1234")
+                .term(10)
+                .build();
+        Assertions.assertThrows(ValidationException.class, () ->
+                preScoringValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
+    }
+
+    @Test
+    @DisplayName("email is written in Cyrillic result incorrect")
+    void givenEmailConsistCyrillicSymbols_whenCallResultsOfValidationMethod_shouldThrowValidationException() {
+        LoanStatementRequestDto loanStatementRequestDto = LoanStatementRequestDto.builder()
+                .amount(BigDecimal.valueOf(200000))
+                .birthdate(LocalDate.of(2002, 9, 23))
+                .email("что-то@gmail.com")
+                .firstName("Petr")
+                .lastName("Petrov")
+                .middleName("Petrovich")
+                .passportNumber("123456")
+                .passportSeries("1234")
+                .term(10)
+                .build();
+        Assertions.assertThrows(ValidationException.class, () ->
+                preScoringValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
+    }
+
+    @Test
+    @DisplayName("the name contains less than 2 symbols result incorrect")
+    void givenNameContainsLessThenTwoSymbols_whenCallResultsOfValidationMethod_shouldThrowValidationException() {
+        LoanStatementRequestDto loanStatementRequestDto = LoanStatementRequestDto.builder()
+                .amount(BigDecimal.valueOf(200000))
+                .birthdate(LocalDate.of(2002, 9, 23))
+                .email("something@qwe.com")
+                .firstName("q")
+                .lastName("Petrov")
+                .middleName("Petrovich")
+                .passportNumber("123456")
+                .passportSeries("1234")
+                .term(10)
+                .build();
+        Assertions.assertThrows(ValidationException.class, () ->
+                preScoringValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
+    }
+
+    @Test
+    @DisplayName("the name contains more than 30 symbols result incorrect")
+    void givenNameContainsMoreThen30Symbols_whenCallResultsOfValidationMethod_shouldThrowValidationException() {
+        LoanStatementRequestDto loanStatementRequestDto = LoanStatementRequestDto.builder()
+                .amount(BigDecimal.valueOf(200000))
+                .birthdate(LocalDate.of(2002, 9, 23))
+                .email("something@qwe.com")
+                .firstName("qweqweqweqweqweqweqweqweqweqweqwe")
+                .lastName("Petrov")
+                .middleName("Petrovich")
+                .passportNumber("123456")
+                .passportSeries("1234")
+                .term(10)
+                .build();
+        Assertions.assertThrows(ValidationException.class, () ->
+                preScoringValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
+    }
+
+    @Test
     @DisplayName("the name is written in Cyrillic result incorrect")
     void givenNameWrittenInCyrillic_whenCallResultsOfValidationMethod_shouldThrowValidationException() {
         LoanStatementRequestDto loanStatementRequestDto = LoanStatementRequestDto.builder()
@@ -186,9 +279,64 @@ class PreScoringValidationServiceTest {
                 preScoringValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
     }
 
+
+    @Test
+    @DisplayName("the last name contains less than 2 symbols result incorrect")
+    void givenLastNameContainsLessThenTwoSymbols_whenCallResultsOfValidationMethod_shouldThrowValidationException() {
+        LoanStatementRequestDto loanStatementRequestDto = LoanStatementRequestDto.builder()
+                .amount(BigDecimal.valueOf(200000))
+                .birthdate(LocalDate.of(2002, 9, 23))
+                .email("something@qwe.com")
+                .firstName("Petr")
+                .lastName("P")
+                .middleName("Petrovich")
+                .passportNumber("123456")
+                .passportSeries("1234")
+                .term(10)
+                .build();
+        Assertions.assertThrows(ValidationException.class, () ->
+                preScoringValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
+    }
+
+    @Test
+    @DisplayName("the last name contains more than 30 symbols result incorrect")
+    void givenLastNameContainsMoreThen30Symbols_whenCallResultsOfValidationMethod_shouldThrowValidationException() {
+        LoanStatementRequestDto loanStatementRequestDto = LoanStatementRequestDto.builder()
+                .amount(BigDecimal.valueOf(200000))
+                .birthdate(LocalDate.of(2002, 9, 23))
+                .email("something@qwe.com")
+                .firstName("Petr")
+                .lastName("qweqweqweqweqweqweqweqweqweqweqwe")
+                .middleName("Petrovich")
+                .passportNumber("123456")
+                .passportSeries("1234")
+                .term(10)
+                .build();
+        Assertions.assertThrows(ValidationException.class, () ->
+                preScoringValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
+    }
+
+    @Test
+    @DisplayName("the last name is written in Cyrillic result incorrect")
+    void givenLastNameWrittenInCyrillic_whenCallResultsOfValidationMethod_shouldThrowValidationException() {
+        LoanStatementRequestDto loanStatementRequestDto = LoanStatementRequestDto.builder()
+                .amount(BigDecimal.valueOf(200000))
+                .birthdate(LocalDate.of(2002, 9, 23))
+                .email("something@qwe.com")
+                .firstName("Petr")
+                .lastName("Петров")
+                .middleName("Petrovich")
+                .passportNumber("123456")
+                .passportSeries("1234")
+                .term(10)
+                .build();
+        Assertions.assertThrows(ValidationException.class, () ->
+                preScoringValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
+    }
+
     @Test
     @DisplayName("the passport number contains more than 6 numbers result incorrect")
-    void givenPassportNumberContainsMoreThanSixNumbers_whenCallResultsOfValidationMethod_shouldThrowValidationException() {
+    void passportNumberContainsMoreThan6Numbers_whenCallResultsOfValidationMethod_shouldThrowValidationException() {
         LoanStatementRequestDto loanStatementRequestDto = LoanStatementRequestDto.builder()
                 .amount(BigDecimal.valueOf(200000))
                 .birthdate(LocalDate.of(2002, 9, 23))
@@ -206,7 +354,7 @@ class PreScoringValidationServiceTest {
 
     @Test
     @DisplayName("the passport number contains less than 6 numbers result incorrect")
-    void givenPassportNumberContainsLessThanSixNumbers_whenCallResultsOfValidationMethod_shouldThrowValidationException() {
+    void passportNumberContainsLessThan6Numbers_whenCallResultsOfValidationMethod_shouldThrowValidationException() {
         LoanStatementRequestDto loanStatementRequestDto = LoanStatementRequestDto.builder()
                 .amount(BigDecimal.valueOf(200000))
                 .birthdate(LocalDate.of(2002, 9, 23))
@@ -224,7 +372,7 @@ class PreScoringValidationServiceTest {
 
     @Test
     @DisplayName("the passport series contains more than 4 numbers result incorrect")
-    void givenPassportSeriesContainsMoreThanForNumbers_whenCallResultsOfValidationMethod_shouldThrowValidationException() {
+    void passportSeriesContainsMoreThan4Numbers_whenCallResultsOfValidationMethod_shouldThrowValidationException() {
         LoanStatementRequestDto loanStatementRequestDto = LoanStatementRequestDto.builder()
                 .amount(BigDecimal.valueOf(200000))
                 .birthdate(LocalDate.of(2002, 9, 23))
@@ -241,8 +389,8 @@ class PreScoringValidationServiceTest {
     }
 
     @Test
-    @DisplayName("the passport series contains more less than 4 numbers result incorrect")
-    void givenPassportSeriesContainsLessThanForNumbers_whenCallResultsOfValidationMethod_shouldThrowValidationException() {
+    @DisplayName("the passport series contains less than 4 numbers result incorrect")
+    void passportSeriesContainsLessThan4Numbers_whenCallResultsOfValidationMethod_shouldThrowValidationException() {
         LoanStatementRequestDto loanStatementRequestDto = LoanStatementRequestDto.builder()
                 .amount(BigDecimal.valueOf(200000))
                 .birthdate(LocalDate.of(2002, 9, 23))
@@ -252,6 +400,24 @@ class PreScoringValidationServiceTest {
                 .middleName("Petrovich")
                 .passportNumber("123456")
                 .passportSeries("12")
+                .term(10)
+                .build();
+        Assertions.assertThrows(ValidationException.class, () ->
+                preScoringValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
+    }
+
+    @Test
+    @DisplayName("the passport series doesn't consist of numbers result incorrect")
+    void passportSeriesDoesNotConsistOfNumbers_whenCallResultsOfValidationMethod_shouldThrowValidationException() {
+        LoanStatementRequestDto loanStatementRequestDto = LoanStatementRequestDto.builder()
+                .amount(BigDecimal.valueOf(200000))
+                .birthdate(LocalDate.of(2002, 9, 23))
+                .email("something@gmail.com")
+                .firstName("Petr")
+                .lastName("Petrov")
+                .middleName("Petrovich")
+                .passportNumber("123456")
+                .passportSeries("qwe")
                 .term(10)
                 .build();
         Assertions.assertThrows(ValidationException.class, () ->
@@ -290,7 +456,8 @@ class PreScoringValidationServiceTest {
                 .passportSeries("1234")
                 .term(12)
                 .build();
-        Assertions.assertDoesNotThrow(() -> preScoringValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
+        Assertions.assertDoesNotThrow(
+                () -> preScoringValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
     }
 
     @Test
@@ -307,6 +474,7 @@ class PreScoringValidationServiceTest {
                 .passportSeries("1234")
                 .term(6)
                 .build();
-        Assertions.assertDoesNotThrow(() -> preScoringValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
+        Assertions.assertDoesNotThrow(
+                () -> preScoringValidationServiceIml.resultsOfValidation(loanStatementRequestDto));
     }
 }
