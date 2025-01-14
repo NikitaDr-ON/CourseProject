@@ -1,9 +1,11 @@
 package com.neoflex.deal.controller;
 
+import com.neoflex.deal.dto.EmailMessage;
 import com.neoflex.deal.dto.FinishRegistrationRequestDto;
 import com.neoflex.deal.dto.LoanOfferDto;
 import com.neoflex.deal.dto.LoanStatementRequestDto;
 import com.neoflex.deal.service.FinishRegistrationService;
+import com.neoflex.deal.service.MessageSenderService;
 import com.neoflex.deal.service.PossibleConditionsService;
 import com.neoflex.deal.service.SelectService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,13 +25,16 @@ public class DealController {
     private final PossibleConditionsService possibleConditionsService;
     private final FinishRegistrationService finishRegistrationService;
     private final SelectService selectService;
+    private final MessageSenderService messageSenderService;
 
     @Autowired
     public DealController(PossibleConditionsService possibleConditionsService,
-                          FinishRegistrationService finishRegistrationService, SelectService selectService) {
+                          FinishRegistrationService finishRegistrationService, SelectService selectService,
+                          MessageSenderService messageSenderService) {
         this.possibleConditionsService = possibleConditionsService;
         this.finishRegistrationService = finishRegistrationService;
         this.selectService = selectService;
+        this.messageSenderService = messageSenderService;
     }
 
     @Operation(
@@ -61,10 +66,10 @@ public class DealController {
             @ApiResponse(responseCode = "404", description = "not found"),
             @ApiResponse(responseCode = "409", description = "incorrect parameter")})
     @PostMapping("/offer/select")
-    public void selectOffer(@RequestBody LoanOfferDto loanOfferDto) {
-        log.info("DealController selectOffer входящий LoanOfferDto: {}",
-                loanOfferDto);
+    public void selectOffer(@RequestBody LoanOfferDto loanOfferDto, @RequestBody EmailMessage emailMessage) {
+        log.info("DealController selectOffer входящий LoanOfferDto: {} и EmailMessage: {}", loanOfferDto, emailMessage);
         selectService.selectStatement(loanOfferDto);
+        messageSenderService.sendRequests(emailMessage);
     }
 
     @Operation(
@@ -92,5 +97,46 @@ public class DealController {
         finishRegistrationService.finishRegistration(finishRegistrationRequestDto, statementId);
     }
 
+    @Operation(
+            summary = "Запрос на отправку документов.",
+            description = "отправляется запрос на отправку документов через kafka, которое должен обработать mc dossier"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Ok")})
+    @PostMapping("/deal/calculate/{statementId}/send")
+    public void sendRequestForSending(@RequestBody EmailMessage emailMessage,
+                                      @PathVariable String statementId) {
+        log.info("DealController sendRequestForSending входящий emailMessage: {}, statementId: {}",
+                emailMessage, statementId);
+        messageSenderService.sendRequests(emailMessage);
+    }
+
+    @Operation(
+            summary = "Запрос на подписание документов.",
+            description = "отправляется запрос на подписание документов через kafka," +
+                    " которое должен обработать mc dossier"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Ok")})
+    @PostMapping("/deal/calculate/{statementId}/sign")
+    public void sendRequestForSign(@RequestBody EmailMessage emailMessage,
+                                   @PathVariable String statementId) {
+        log.info("DealController sendRequestForSign входящий emailMessage: {}, statementId: {}",
+                emailMessage, statementId);
+        messageSenderService.sendRequests(emailMessage);
+    }
+
+    @Operation(
+            summary = "Подписание документов.",
+            description = ""
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Ok")})
+    @PostMapping("/deal/calculate/{statementId}/code")
+    public void signingDocuments(@RequestBody EmailMessage emailMessage,
+                                 @PathVariable String statementId) {
+        log.info("DealController signingDocuments входящий emailMessage: {}, statementId: {}",
+                emailMessage, statementId);
+    }
 
 }
