@@ -28,8 +28,6 @@ public class EmailSenderConfiguration {
         mailSender.setPassword(emailProperties.getEmailPassword());
         Properties props = mailSender.getJavaMailProperties();
         props.put(emailProperties.getEmailPropertyForProtocol(), emailProperties.getEmailProtocol());
-        props.put(emailProperties.getEmailPropertyForAuth(), emailProperties.getIsAuthEnable());
-        props.put(emailProperties.getEmailPropertyForStartTls(), emailProperties.getIsTlsEnable());
         props.put(emailProperties.getEmailPropertyForDebug(), emailProperties.getIsDebugEnable());
         return mailSender;
     }

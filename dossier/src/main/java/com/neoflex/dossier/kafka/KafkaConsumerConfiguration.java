@@ -29,18 +29,13 @@ public class KafkaConsumerConfiguration {
     @Bean
     public ConsumerFactory<String, String> consumerFactory() {
         Map<String, Object> props = new HashMap<>();
-        props.put(
-                ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
-                kafkaProperties.getKafkaServer());
-        props.put(
-                ConsumerConfig.GROUP_ID_CONFIG,
-                kafkaProperties.getKafkaGroupId());
-        props.put(
-                ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
-                StringDeserializer.class);
-        props.put(
-                ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
-                JsonDeserializer.class);
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.getKafkaServer());
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, kafkaProperties.getKafkaGroupId());
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
+        props.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
+        props.put(JsonDeserializer.TYPE_MAPPINGS,
+                "com.neoflex.deal.dto.EmailMessage:com.neoflex.dossier.dto.EmailMessage");
         return new DefaultKafkaConsumerFactory<>(props);
     }
 

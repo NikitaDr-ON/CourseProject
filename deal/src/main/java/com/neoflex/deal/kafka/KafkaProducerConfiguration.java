@@ -1,9 +1,9 @@
 package com.neoflex.deal.kafka;
 
-import com.fasterxml.jackson.databind.ser.std.StringSerializer;
 import com.neoflex.deal.dto.EmailMessage;
 import com.neoflex.deal.model.KafkaProperties;
 import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
@@ -26,16 +26,10 @@ public class KafkaProducerConfiguration {
     @Bean
     public ProducerFactory<String, EmailMessage> producerFactory() {
         Map<String, Object> configProps = new HashMap<>();
-        configProps.put(
-                ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
-                kafkaProperties.getKafkaServer());
+        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.getKafkaServer());
         configProps.put(ProducerConfig.CLIENT_ID_CONFIG, kafkaProperties.getKafkaGroupId());
-        configProps.put(
-                ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
-                StringSerializer.class);
-        configProps.put(
-                ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
-                JsonSerializer.class);
+        configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
         return new DefaultKafkaProducerFactory<>(configProps);
     }
 
