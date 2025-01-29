@@ -3,6 +3,7 @@ package com.neoflex.dossier.email;
 import com.neoflex.dossier.dto.EmailMessage;
 import com.neoflex.dossier.enums.Theme;
 import com.neoflex.dossier.model.EmailProperties;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -53,5 +54,9 @@ class EmailSenderTest {
         expectedMessage.setSubject(String.valueOf(subject));
         expectedMessage.setText(text);
         verify(javaMailSender, times(1)).send(expectedMessage);
+        Assertions.assertEquals(expectedMessage.getFrom(),from);
+        Assertions.assertEquals(expectedMessage.getSubject(),subject.name());
+        Assertions.assertEquals(expectedMessage.getText(),text);
+        Assertions.assertEquals(expectedMessage.getTo()[0],to);
     }
 }
