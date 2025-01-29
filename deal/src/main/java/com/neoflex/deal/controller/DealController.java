@@ -1,13 +1,10 @@
 package com.neoflex.deal.controller;
 
-import com.neoflex.deal.dto.EmailMessage;
 import com.neoflex.deal.dto.FinishRegistrationRequestDto;
 import com.neoflex.deal.dto.LoanOfferDto;
 import com.neoflex.deal.dto.LoanStatementRequestDto;
-import com.neoflex.deal.service.FinishRegistrationService;
-import com.neoflex.deal.service.MessageSenderService;
-import com.neoflex.deal.service.PossibleConditionsService;
-import com.neoflex.deal.service.SelectService;
+import com.neoflex.deal.enums.Theme;
+import com.neoflex.deal.service.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -16,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @RestController
@@ -26,15 +24,18 @@ public class DealController {
     private final FinishRegistrationService finishRegistrationService;
     private final SelectService selectService;
     private final MessageSenderService messageSenderService;
+    private final FillEmailMessageDtoService fillEmailMessageDtoService;
 
     @Autowired
     public DealController(PossibleConditionsService possibleConditionsService,
                           FinishRegistrationService finishRegistrationService, SelectService selectService,
-                          MessageSenderService messageSenderService) {
+                          MessageSenderService messageSenderService,
+                          FillEmailMessageDtoService fillEmailMessageDtoService) {
         this.possibleConditionsService = possibleConditionsService;
         this.finishRegistrationService = finishRegistrationService;
         this.selectService = selectService;
         this.messageSenderService = messageSenderService;
+        this.fillEmailMessageDtoService = fillEmailMessageDtoService;
     }
 
     @Operation(
@@ -66,10 +67,11 @@ public class DealController {
             @ApiResponse(responseCode = "404", description = "not found"),
             @ApiResponse(responseCode = "409", description = "incorrect parameter")})
     @PostMapping("/offer/select")
-    public void selectOffer(@RequestBody LoanOfferDto loanOfferDto, @RequestBody EmailMessage emailMessage) {
-        log.info("DealController selectOffer входящий LoanOfferDto: {} и EmailMessage: {}", loanOfferDto, emailMessage);
+    public void selectOffer(@RequestBody LoanOfferDto loanOfferDto) {
+        log.info("DealController selectOffer входящий LoanOfferDto: {}", loanOfferDto);
         selectService.selectStatement(loanOfferDto);
-        messageSenderService.sendRequests(emailMessage);
+        messageSenderService.sendRequests(fillEmailMessageDtoService.fillEmailMessageDto(loanOfferDto.getStatementId(),
+                Theme.FINISH_REGISTRATION));
     }
 
     @Operation(
@@ -95,6 +97,8 @@ public class DealController {
         log.info("DealController completeRegistration входящий FinishRegistrationRequestDto: {}, statementId: {}",
                 finishRegistrationRequestDto, statementId);
         finishRegistrationService.finishRegistration(finishRegistrationRequestDto, statementId);
+        messageSenderService.sendRequests(fillEmailMessageDtoService.fillEmailMessageDto(UUID.fromString(statementId),
+                Theme.CREATE_DOCUMENTS));
     }
 
     @Operation(
@@ -102,13 +106,13 @@ public class DealController {
             description = "отправляется запрос на отправку документов через kafka, которое должен обработать mc dossier"
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Ok")})
+            @ApiResponse(responseCode = "200", description = "Ok"),
+            @ApiResponse(responseCode = "404", description = "not found")})
     @PostMapping("/deal/calculate/{statementId}/send")
-    public void sendRequestForSending(@RequestBody EmailMessage emailMessage,
-                                      @PathVariable String statementId) {
-        log.info("DealController sendRequestForSending входящий emailMessage: {}, statementId: {}",
-                emailMessage, statementId);
-        messageSenderService.sendRequests(emailMessage);
+    public void sendRequestForSending(@PathVariable String statementId) {
+        log.info("DealController sendRequestForSending входящий statementId: {}", statementId);
+        messageSenderService.sendRequests(fillEmailMessageDtoService.fillEmailMessageDto(UUID.fromString(statementId),
+                Theme.SEND_DOCUMENTS));
     }
 
     @Operation(
@@ -117,26 +121,27 @@ public class DealController {
                     " которое должен обработать mc dossier"
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Ok")})
+            @ApiResponse(responseCode = "200", description = "Ok"),
+            @ApiResponse(responseCode = "404", description = "not found")})
     @PostMapping("/deal/calculate/{statementId}/sign")
-    public void sendRequestForSign(@RequestBody EmailMessage emailMessage,
-                                   @PathVariable String statementId) {
-        log.info("DealController sendRequestForSign входящий emailMessage: {}, statementId: {}",
-                emailMessage, statementId);
-        messageSenderService.sendRequests(emailMessage);
+    public void sendRequestForSign(@PathVariable String statementId) {
+        log.info("DealController sendRequestForSign входящий statementId: {}", statementId);
+        messageSenderService.sendRequests(fillEmailMessageDtoService.fillEmailMessageDto(UUID.fromString(statementId),
+                Theme.SEND_SES));
     }
 
     @Operation(
             summary = "Подписание документов.",
-            description = ""
+            description = "подписание документов"
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Ok")})
+            @ApiResponse(responseCode = "200", description = "Ok"),
+            @ApiResponse(responseCode = "404", description = "not found")})
     @PostMapping("/deal/calculate/{statementId}/code")
-    public void signingDocuments(@RequestBody EmailMessage emailMessage,
-                                 @PathVariable String statementId) {
-        log.info("DealController signingDocuments входящий emailMessage: {}, statementId: {}",
-                emailMessage, statementId);
+    public void signingDocuments(@PathVariable String statementId) {
+        log.info("DealController signingDocuments входящий statementId: {}", statementId);
+        messageSenderService.sendRequests(fillEmailMessageDtoService.fillEmailMessageDto(UUID.fromString(statementId),
+                Theme.CREDIT_ISSUED));
     }
 
 }

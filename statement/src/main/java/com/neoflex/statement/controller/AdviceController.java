@@ -19,7 +19,7 @@ public class AdviceController {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Response> handleConflictException(Exception e) {
         Response response = new Response(e.getMessage());
-        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }

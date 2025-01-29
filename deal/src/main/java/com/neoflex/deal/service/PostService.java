@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface PostService {
     List<LoanOfferDto> postOffers(LoanStatementRequestDto loanStatementRequestDto);
-    public CreditDto postLoanOfferDto(ScoringDataDto scoringDataDto);
+    CreditDto postLoanOfferDto(ScoringDataDto scoringDataDto);
 }

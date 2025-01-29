@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -14,7 +16,7 @@ public class EmailMessage {
 
     private String address;
     private Theme theme;
-    private Long statementId;
+    private UUID statementId;
     private String text;
 
 }

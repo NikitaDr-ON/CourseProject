@@ -3,8 +3,7 @@ package com.neoflex.deal.entity;
 import com.neoflex.deal.dto.PaymentScheduleElementDto;
 import com.neoflex.deal.enums.CreditStatus;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -12,7 +11,10 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
-@Data
+@AllArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
 @Builder
 @Table(name = "credit")
 public class Credit {

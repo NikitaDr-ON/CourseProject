@@ -27,7 +27,7 @@ public class ListenerRequests {
     private static final String STATEMENT_DENIED = "STATEMENT_DENIED";
 
     @KafkaListener(
-            topics = FINISH_REGISTRATION,
+            topics = {FINISH_REGISTRATION, CREATE_DOCUMENTS, SEND_DOCUMENTS, SEND_SES, CREDIT_ISSUED, STATEMENT_DENIED},
             groupId = GROUP_ID)
     public void getRequest(EmailMessage emailMessage) {
         log.info("ListenerRequests getRequest получил следующее сообщение из kafka: {}", emailMessage);
